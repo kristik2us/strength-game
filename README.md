@@ -2,7 +2,7 @@
 
 A modern, interactive React application that helps users discover their personal strengths through real-life scenarios. Built with React, Vite, and Tailwind CSS.
 
-![Strength Game Screenshot](https://via.placeholder.com/800x400/667eea/white?text=Strength+Scenario+Game)
+![Demo]((https://kristik2us.github.io/strength-game/))
 
 ## ✨ Features
 
