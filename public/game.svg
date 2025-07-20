@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="gamepadGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#E5E7EB"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main gamepad body -->
+  <path d="M8 4.5c-2.5 0-4.5 2-4.5 4.5v2c0 1.5.5 3 1.5 4l2 2.5c.5.5 1.2.5 1.7 0L10 16c.5-.5 1.2-.5 1.7 0l1.3 1.5c.5.5 1.2.5 1.7 0l2-2.5c1-1 1.5-2.5 1.5-4V9c0-2.5-2-4.5-4.5-4.5h-5z" fill="url(#gamepadGradient)" stroke="none"/>
+  
+  <!-- D-pad -->
+  <g transform="translate(6.5, 8.5)">
+    <!-- Horizontal bar -->
+    <rect x="-1.5" y="-0.3" width="3" height="0.6" rx="0.3" fill="url(#buttonGradient)"/>
+    <!-- Vertical bar -->
+    <rect x="-0.3" y="-1.5" width="0.6" height="3" rx="0.3" fill="url(#buttonGradient)"/>
+  </g>
+  
+  <!-- Action buttons -->
+  <!-- Button A -->
+  <circle cx="16.5" cy="10.5" r="0.8" fill="url(#buttonGradient)"/>
+  <!-- Button B -->
+  <circle cx="17.5" cy="8.5" r="0.8" fill="url(#buttonGradient)"/>
+  
+  <!-- Shoulder buttons -->
+  <rect x="5" y="5.5" width="2" height="0.8" rx="0.4" fill="url(#buttonGradient)"/>
+  <rect x="17" y="5.5" width="2" height="0.8" rx="0.4" fill="url(#buttonGradient)"/>
+  
+  <!-- Center details -->
+  <circle cx="12" cy="7" r="0.4" fill="#FFFFFF" opacity="0.8"/>
+</svg>
