@@ -4,8 +4,6 @@ A modern, interactive React application that helps users discover their personal
 
 ## 🎮 [**Try the Live Demo →**](https://kristik2us.github.io/strength-game/)
 
-![Demo]((https://kristik2us.github.io/strength-game/))
-
 ## ✨ Features
 
 ### 🎯 Core Functionality
