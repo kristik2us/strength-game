@@ -5,7 +5,7 @@
 
 /* Global styles for the body and root container */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; /* Enhanced font stack */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; /* Modern system font stack */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
