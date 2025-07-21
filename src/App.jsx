@@ -1014,7 +1014,7 @@ const App = () => {
                                 <Lightbulb className="mr-2" size={14} />
                                 <span>Tap any option to continue</span>
                             </div>
-                            <div className="hidden sm:block bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-2 text-gray-600 font-medium flex items-center">
+                            <div className="hidden sm:block bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-2 text-gray-600 font-medium items-center">
                                 <Keyboard className="mr-2" size={14} />
                                 <span>Use keys 1-{shuffledScenarios[currentScenarioIndex]?.choices.length || 3} or click to select</span>
                             </div>
