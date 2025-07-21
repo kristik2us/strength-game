@@ -758,15 +758,18 @@ const App = () => {
 
     // Effect to initialize shuffled scenarios when component mounts
     useEffect(() => {
-        // Initialize shuffled scenarios on first load
-        if (shuffledScenarios.length === 0) {
-            setShuffledScenarios(shuffleArray(originalScenarios));
-        }
-    }, [shuffledScenarios.length]); // Include dependency
+        // Always initialize with fresh shuffled scenarios on component mount
+        setShuffledScenarios(shuffleArray(originalScenarios));
+        // Reset all game state on page load
+        setCurrentScenarioIndex(0);
+        setStrengthsTally({});
+        setGameStarted(false);
+        setShowWelcome(true);
+    }, []); // Empty dependency array - only runs once on mount
 
     // Calculate progress for the progress bar
     const totalScenarios = shuffledScenarios.length;
-    const completedScenarios = currentScenarioIndex;
+    const completedScenarios = currentScenarioIndex; // Number of questions actually completed
     const percentage = totalScenarios > 0 ? (completedScenarios / totalScenarios) * 100 : 0;
 
     // Determine if the game is over
@@ -917,7 +920,7 @@ const App = () => {
                             <div className="flex justify-between items-center mb-4 sm:mb-6 gap-2">
                                 <div className="bg-white/80 backdrop-blur-sm px-3 sm:px-4 py-2 rounded-lg">
                                     <p className="text-base sm:text-lg font-semibold text-gray-700 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                                        Scenario <span className="text-purple-600">{completedScenarios + 1}</span>
+                                        Scenario <span className="text-purple-600">{currentScenarioIndex + 1}</span>
                                         <span className="text-blue-400 mx-1 sm:mx-2">/</span>
                                         <span className="text-blue-600">{totalScenarios}</span>
                                     </p>
@@ -1019,7 +1022,7 @@ const App = () => {
                                 <span>Use keys 1-{shuffledScenarios[currentScenarioIndex]?.choices.length || 3} or click to select</span>
                             </div>
                             <div className="bg-gray-100/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-2 text-white font-medium shadow-sm bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-                                {completedScenarios + 1} of {totalScenarios}
+                                {currentScenarioIndex + 1} of {totalScenarios}
                             </div>
                         </div>
                     </div>
