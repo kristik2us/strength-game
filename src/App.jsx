@@ -9,7 +9,7 @@ import {
     Calendar, Focus, Settings, Binoculars,
     FileText, DollarSign, Layers, RefreshCw, Sun, Globe,
     GraduationCap, Activity, Coffee, Share2, Headphones,
-    Microscope, FileCheck, Printer,
+    Microscope, FileCheck,
     AlertTriangle, Mic, Flag, Mountain,
     Smile, UserCheck, TreePine
 } from 'lucide-react';
@@ -817,165 +817,6 @@ const App = () => {
         .sort(([, countA], [, countB]) => countB - countA);
     const topStrengths = sortedStrengths.slice(0, Math.min(sortedStrengths.length, 5)); // Show top 5
 
-    // Share functionality with social media and link sharing
-    const handleShare = useCallback(async () => {
-        const strengthsList = topStrengths.map(([strength], index) => `${index + 1}. ${strength}`).join(', ');
-        const shareText = `🎯 Just discovered my top strengths: ${strengthsList}! Find out yours at ${window.location.origin}/strength-game/`;
-        const shareUrl = `${window.location.origin}/strength-game/`;
-
-        // Try native Web Share API first (mobile devices)
-        if (navigator.share && navigator.canShare && navigator.canShare({ text: shareText, url: shareUrl })) {
-            try {
-                await navigator.share({
-                    title: '🎯 My Strength Discovery Results',
-                    text: shareText,
-                    url: shareUrl
-                });
-                return;
-            } catch (error) {
-                if (error.name === 'AbortError') return; // User cancelled
-            }
-        }
-
-        // Fallback: Show social media options
-        showSocialShareModal(shareText, shareUrl);
-    }, [topStrengths]);
-
-    const showSocialShareModal = useCallback((shareText, shareUrl) => {
-        const encodedText = encodeURIComponent(shareText);
-        const encodedUrl = encodeURIComponent(shareUrl);
-        
-        // Create social sharing options
-        const socialOptions = [
-            {
-                name: 'Twitter',
-                url: `https://twitter.com/intent/tweet?text=${encodedText}`,
-                color: 'bg-blue-400 hover:bg-blue-500'
-            },
-            {
-                name: 'LinkedIn',
-                url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}&summary=${encodedText}`,
-                color: 'bg-blue-600 hover:bg-blue-700'
-            },
-            {
-                name: 'Facebook',
-                url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
-                color: 'bg-blue-700 hover:bg-blue-800'
-            },
-            {
-                name: 'Copy Link',
-                action: () => {
-                    navigator.clipboard.writeText(shareUrl).then(() => {
-                        alert('Link copied to clipboard!');
-                    }).catch(() => {
-                        prompt('Copy this link:', shareUrl);
-                    });
-                },
-                color: 'bg-gray-600 hover:bg-gray-700'
-            }
-        ];
-
-        // Create and show modal
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
-        modal.innerHTML = `
-            <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-                <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">Share Your Results</h3>
-                <div class="space-y-3">
-                    ${socialOptions.map((option, index) => `
-                        <button class="w-full ${option.color} text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center" data-action="${index}">
-                            ${option.name}
-                        </button>
-                    `).join('')}
-                </div>
-                <button class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors duration-200" data-action="close">
-                    Cancel
-                </button>
-            </div>
-        `;
-
-        // Handle clicks
-        modal.addEventListener('click', (e) => {
-            const action = e.target.getAttribute('data-action');
-            if (action === 'close' || e.target === modal) {
-                document.body.removeChild(modal);
-            } else if (action !== null) {
-                const index = parseInt(action);
-                const option = socialOptions[index];
-                if (option.action) {
-                    option.action();
-                } else if (option.url) {
-                    window.open(option.url, '_blank', 'width=600,height=400');
-                }
-                document.body.removeChild(modal);
-            }
-        });
-
-        document.body.appendChild(modal);
-    }, []);
-
-    const handlePrint = useCallback(() => {
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        const strengthsList = topStrengths.map(([strength], index) => {
-            const definition = strengthDefinitions[strength];
-            return `
-                <div style="margin-bottom: 30px; page-break-inside: avoid;">
-                    <h3 style="color: #2563eb; margin-bottom: 10px;">${index + 1}. ${strength}</h3>
-                    ${definition ? `
-                        <p style="margin-bottom: 8px;"><strong>Definition:</strong> ${definition.description}</p>
-                        <p style="margin-bottom: 8px;"><strong>Personal Life:</strong> ${definition.personal}</p>
-                        <p style="margin-bottom: 8px;"><strong>Career:</strong> ${definition.career}</p>
-                    ` : ''}
-                </div>
-            `;
-        }).join('');
-
-        const printContent = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>My Strength Assessment Results</title>
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
-                    h1 { color: #2563eb; text-align: center; margin-bottom: 30px; }
-                    h2 { color: #4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
-                    h3 { color: #2563eb; }
-                    .header { text-align: center; margin-bottom: 40px; }
-                    .timestamp { color: #6b7280; font-size: 14px; }
-                    @media print { .no-print { display: none; } }
-                </style>
-            </head>
-            <body>
-                <div class="header">
-                    <h1>🎯 My Strength Assessment Results</h1>
-                    <p class="timestamp">Generated on ${new Date().toLocaleDateString()}</p>
-                    <p>From the Strength Discovery Game</p>
-                </div>
-                <h2>My Top ${topStrengths.length} Strengths:</h2>
-                ${strengthsList}
-                <hr style="margin-top: 40px;">
-                <p style="text-align: center; color: #6b7280; font-size: 14px;">
-                    Discover your strengths at: ${window.location.origin}/strength-game/
-                </p>
-            </body>
-            </html>
-        `;
-
-        printWindow.document.write(printContent);
-        printWindow.document.close();
-        printWindow.focus();
-        
-        // Wait a moment for content to load, then print
-        setTimeout(() => {
-            printWindow.print();
-            // Close the print window after printing
-            setTimeout(() => {
-                printWindow.close();
-            }, 1000);
-        }, 500);
-    }, [topStrengths]);
-
     return (
         <div className="flex justify-center items-center min-h-screen p-2 sm:p-4 box-border select-text">
             <div className="bg-white backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-6 md:p-8 lg:p-12 max-w-7xl w-full text-center flex flex-col gap-6 sm:gap-8 relative overflow-hidden select-text">
@@ -1203,30 +1044,6 @@ const App = () => {
                                 Discover how each of your unique strengths can transform your personal relationships and accelerate your career success
                             </p>
                             <div className="w-16 sm:w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mt-4 sm:mt-6"></div>
-                        </div>
-                        
-                        {/* Share and Print Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-8">
-                            <button
-                                onClick={handleShare}
-                                className="group relative bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 px-6 rounded-2xl text-base font-semibold border-none cursor-pointer transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300/50 overflow-hidden flex items-center"
-                                aria-label="Share your strength assessment results on social media"
-                            >
-                                <span className="relative z-10 flex items-center">
-                                    <Share2 className="mr-2" size={20} />
-                                    Share With Friends
-                                </span>
-                            </button>
-                            <button
-                                onClick={handlePrint}
-                                className="group relative bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 px-6 rounded-2xl text-base font-semibold border-none cursor-pointer transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300/50 overflow-hidden flex items-center"
-                                aria-label="Print your strength assessment results"
-                            >
-                                <span className="relative z-10 flex items-center">
-                                    <Printer className="mr-2" size={20} />
-                                    Print Results
-                                </span>
-                            </button>
                         </div>
                         
                         <div className="grid grid-cols-1 gap-6 mb-12">
